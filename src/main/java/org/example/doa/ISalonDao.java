@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ISalonDao {
+    //Get salon count
+    int count();
     //Get all salons.
     List<Salon> findAll();
     //Create a new salon providing all data and return this new salon (from service layer).

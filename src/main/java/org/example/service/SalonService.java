@@ -1,9 +1,11 @@
 package org.example.service;
 
 import org.example.entities.Salon;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SalonService implements ISalonService{
     @Override
     public List<Salon> findAll() {
