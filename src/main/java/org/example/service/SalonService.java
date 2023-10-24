@@ -96,7 +96,6 @@ public class SalonService implements ISalonService{
 
     @Override
     public List<Salon> findAllOpenAllDays() {
-        List<Salon> allSalons = salonDao.findAll();
-        return allSalons.stream().filter(s -> s.getDaysOpen().equals("1111111")).toList();
+        return salonDao.findAllOpenAllDays();
     }
 }
