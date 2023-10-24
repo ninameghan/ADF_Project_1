@@ -18,5 +18,6 @@ public interface IStylistDao {
     boolean editSalon(int newSalonId, int id);
     //Delete a stylist.
     boolean deleteById(int id);
-
+    //Determine the average salary of stylists in a particular salon.
+    double findAverageSalaryForSalon(int salonId);
 }

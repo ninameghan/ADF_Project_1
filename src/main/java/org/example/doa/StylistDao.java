@@ -80,4 +80,12 @@ public class StylistDao implements IStylistDao{
                 "delete from stylists where stylist_id=:id",
                 mapSqlParameterSource) == 1;
     }
+
+    @Override
+    public double findAverageSalaryForSalon(int salonId) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("salon_id", salonId);
+        String SQL = "select avg(stylist_annual_salary) from stylists where salon_id=:salon_id";
+        return namedParameterJdbcTemplate.queryForObject(SQL, mapSqlParameterSource, Double.class);
+    }
 }

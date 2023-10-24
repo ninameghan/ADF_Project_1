@@ -76,7 +76,6 @@ public class StylistService implements  IStylistService{
 
     @Override
     public double findAverageSalaryForSalon(int salonId) {
-        List<Stylist> allStylistsForSalon = findAllBySalon(salonId);
-        return allStylistsForSalon.stream().collect(Collectors.averagingDouble(Stylist::getAnnualSalary));
+        return stylistDao.findAverageSalaryForSalon(salonId);
     }
 }
