@@ -118,6 +118,4 @@ public class StylistServiceTests {
             stylistService.deleteById(11111);
         });
     }
-
-
 }

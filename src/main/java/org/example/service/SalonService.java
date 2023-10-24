@@ -29,29 +29,34 @@ public class SalonService implements ISalonService{
     @Override
     @SneakyThrows
     public Salon add(Salon salon) {
-        if (salon.getName().isBlank()){
-            throw new SalonMalformedException("Salon name cannot be blank!");
+        try{
+            if (salon.getName().isBlank()){
+                throw new SalonMalformedException("Salon name cannot be blank!");
+            }
+            if (salon.getAddress().isBlank()){
+                throw new SalonMalformedException("Salon address cannot be blank!");
+            }
+            if (salon.getPhoneNumber().isBlank()){
+                throw new SalonMalformedException("Salon phone number cannot be blank!");
+            }
+            if (salon.getDaysOpen().isBlank()){
+                throw new SalonMalformedException("Salon days open cannot be blank!");
+            }
+            if (!salon.getDaysOpen().contains("1")){
+                throw new SalonMalformedException("Salon must be open at least 1 day a week!");
+            }
+            if (salon.getId() <= 0){
+                throw new SalonMalformedException("Salon ID is invalid!");
+            }
+            if (salonDao.findById(salon.getId()).isPresent()){
+                throw new SalonIdAlreadyExistsException("Salon with ID " + salon.getId() + " already exists!");
+            }
+            salonDao.save(salon);
+            return salonDao.findById(salon.getId()).get();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return salon;
         }
-        if (salon.getAddress().isBlank()){
-            throw new SalonMalformedException("Salon address cannot be blank!");
-        }
-        if (salon.getPhoneNumber().isBlank()){
-            throw new SalonMalformedException("Salon phone number cannot be blank!");
-        }
-        if (salon.getDaysOpen().isBlank()){
-            throw new SalonMalformedException("Salon days open cannot be blank!");
-        }
-        if (!salon.getDaysOpen().contains("1")){
-            throw new SalonMalformedException("Salon must be open at least 1 day a week!");
-        }
-        if (salon.getId() < 0){
-            throw new SalonMalformedException("Salon ID is invalid!");
-        }
-        if (salonDao.findById(salon.getId()).isPresent()){
-            throw new SalonIdAlreadyExistsException("Salon with ID " + salon.getId() + " already exists!");
-        }
-        salonDao.save(salon);
-        return salonDao.findById(salon.getId()).get();
     }
 
     @Override

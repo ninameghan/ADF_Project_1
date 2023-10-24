@@ -3,7 +3,6 @@ package org.example.service;
 import org.example.entities.Salon;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ISalonService {
     //Count

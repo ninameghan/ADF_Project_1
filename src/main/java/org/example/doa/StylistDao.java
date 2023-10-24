@@ -1,6 +1,5 @@
 package org.example.doa;
 
-import org.example.entities.SalonRowMapper;
 import org.example.entities.Stylist;
 import org.example.entities.StylistRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
