@@ -1,34 +1,82 @@
 package org.example.service;
 
+import lombok.SneakyThrows;
+import org.example.doa.IStylistDao;
 import org.example.entities.Stylist;
+import org.example.service.exceptions.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StylistService implements  IStylistService{
+    
+    @Autowired
+    private IStylistDao stylistDao;
+
+    @Override
+    public int count() {
+        return stylistDao.count();
+    }
+
+    @Override
+    @SneakyThrows
+    public Stylist findById(int id) {
+        return stylistDao.findById(id).orElseThrow(() -> new StylistNotFoundException("Stylist with id " + id + " was not found!"));
+    }
+
     @Override
     public List<Stylist> findAllBySalon(int salonId) {
-        return null;
+        return stylistDao.findAllBySalon(salonId);
     }
 
     @Override
+    @SneakyThrows
     public Stylist add(Stylist stylist) {
-        return null;
+        if (stylist.getName().isBlank()){
+            throw new StylistMalformedException("Stylist name cannot be blank!");
+        }
+        if (stylist.getAnnualSalary() < 0){
+            throw new StylistMalformedException("Stylist annual salary must be a positive amount!");
+        }
+        if (stylist.getSalonId() <= 0){
+            throw new StylistMalformedException("Stylist salon ID is invalid!");
+        }
+        if (stylist.getId() <= 0){
+            throw new StylistMalformedException("Stylist ID is invalid!");
+        }
+        if (stylistDao.findById(stylist.getId()).isPresent()){
+            throw new StylistIdAlreadyExistsException("Stylist with ID " + stylist.getId() + " already exists!");
+        }
+        stylistDao.save(stylist);
+        return stylistDao.findById(stylist.getId()).get();
     }
 
     @Override
+    @SneakyThrows
     public boolean changeSalon(int newSalonId, int id) {
-        return false;
+        if (newSalonId <= 0){
+            throw new StylistMalformedException("Stylist salon ID is invalid!");
+        }
+        if (stylistDao.findById(id).isEmpty()){
+            throw new StylistNotFoundException("Stylist with id " + id + " was not found!");
+        }
+        return stylistDao.editSalon(newSalonId, id);
     }
 
     @Override
+    @SneakyThrows
     public void deleteById(int id) {
-
+        if (!stylistDao.deleteById(id)) {
+            throw new StylistNotFoundException("Stylist with id " + id + " was not found!");
+        }
     }
 
     @Override
     public double findAverageSalaryForSalon(int salonId) {
-        return 0;
+        List<Stylist> allStylistsForSalon = findAllBySalon(salonId);
+        return allStylistsForSalon.stream().collect(Collectors.averagingDouble(Stylist::getAnnualSalary));
     }
 }

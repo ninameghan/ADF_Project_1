@@ -5,6 +5,10 @@ import org.example.entities.Stylist;
 import java.util.List;
 
 public interface IStylistService {
+    //Count
+    int count();
+    //Find by id
+    Stylist findById(int id);
     //Get all stylists in a particular salon.
     List<Stylist> findAllBySalon(int salonId);
     //Add a stylist, ensuring you add them to a salon.

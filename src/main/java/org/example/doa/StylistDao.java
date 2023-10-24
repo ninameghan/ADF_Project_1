@@ -4,12 +4,14 @@ import org.example.entities.SalonRowMapper;
 import org.example.entities.Stylist;
 import org.example.entities.StylistRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class StylistDao implements IStylistDao{
@@ -23,6 +25,20 @@ public class StylistDao implements IStylistDao{
     @Override
     public int count() {
         return jdbcTemplate.queryForObject("select count(*) from stylists", Integer.class);
+    }
+
+    @Override
+    public Optional<Stylist> findById(int id) {
+        try {
+            MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+            mapSqlParameterSource.addValue("id", id);
+            return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(
+                    "select * from stylists where stylist_id=:id",
+                    mapSqlParameterSource,
+                    new StylistRowMapper()));
+        } catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
     }
 
     @Override

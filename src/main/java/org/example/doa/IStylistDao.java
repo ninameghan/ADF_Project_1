@@ -3,10 +3,13 @@ package org.example.doa;
 import org.example.entities.Stylist;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IStylistDao {
     //Count
     int count();
+    //Find by id
+    Optional<Stylist> findById(int id);
     //Get all stylists in a particular salon.
     List<Stylist> findAllBySalon(int salonId);
     //Add a stylist, ensuring you add them to a salon.
