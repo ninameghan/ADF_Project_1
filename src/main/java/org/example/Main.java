@@ -2,9 +2,7 @@ package org.example;
 
 import org.example.entities.Salon;
 import org.example.service.ISalonService;
-import org.example.service.IStylistService;
 import org.example.service.SalonService;
-import org.example.service.StylistService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

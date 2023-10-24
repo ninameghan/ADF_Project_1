@@ -20,4 +20,6 @@ public interface ISalonDao {
     boolean editDaysOpen(String newDaysOpen, int id);
     //Delete a salon and all that salon's stylists.
     boolean deleteById(int id);
+    //List all those salons open 7 days a week.
+    List<Salon> findAllOpenAllDays();
 }

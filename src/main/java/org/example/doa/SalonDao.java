@@ -85,4 +85,14 @@ public class SalonDao implements ISalonDao {
                 "delete from salons where salon_id=:id",
                 mapSqlParameterSource) == 1;
     }
+
+    @Override
+    public List<Salon> findAllOpenAllDays() {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("days_open", "1111111");
+        return namedParameterJdbcTemplate.query(
+                "select * from salons where salon_days_open=:days_open",
+                mapSqlParameterSource,
+                new SalonRowMapper());
+    }
 }
