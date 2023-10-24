@@ -22,7 +22,7 @@ public class Main {
         System.out.println(salonService.findById(1));
         // Add
         System.out.println("\nAdd:");
-        Salon salon = new Salon(11, "Salon 1", "Address 11", "0123456789", "0110101");
+        Salon salon = new Salon(11, "Salon 1", "Address 11", "0123456789", "2357");
         salonService.add(salon);
         salonService.findAll().forEach(System.out::println);
         // Find all by name
@@ -30,9 +30,9 @@ public class Main {
         salonService.findAllByName("Salon 1").forEach(System.out::println);
         // Edit days open
         System.out.println("\nEdit days open:");
-        System.out.println(salonService.findById(1).getDaysOpen());
-        salonService.editDaysOpen("1111100", 1);
-        System.out.println(salonService.findById(1).getDaysOpen());
+        salonService.findById(1).printDays();
+        salonService.editDaysOpen("12345", 1);
+        salonService.findById(1).printDays();
         // Delete by Id
         System.out.println("\nDelete by Id:");
         salonService.deleteById(2);
@@ -43,16 +43,16 @@ public class Main {
 
         System.out.println("\n***** Salon Errors *****");
         // Add with blank name
-        Salon salon1 = new Salon(22, "", "Address 11", "0123456789", "0110101");
+        Salon salon1 = new Salon(22, "", "Address 11", "0123456789", "2357");
         salonService.add(salon1);
         // Add with no days open
-        Salon salon2 = new Salon(22, "Salon 22", "Address 11", "0123456789", "0000000");
+        Salon salon2 = new Salon(22, "Salon 22", "Address 11", "0123456789", "");
         salonService.add(salon2);
         // Add with invalid salon id
-        Salon salon3 = new Salon(0, "Salon 22", "Address 11", "0123456789", "0110101");
+        Salon salon3 = new Salon(0, "Salon 22", "Address 11", "0123456789", "2357");
         salonService.add(salon3);
         // Add salon with Id already exists
-        Salon salon4 = new Salon(1, "Salon 22", "Address 11", "0123456789", "0110101");
+        Salon salon4 = new Salon(1, "Salon 22", "Address 11", "0123456789", "2357");
         salonService.add(salon4);
     }
 }
