@@ -13,7 +13,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Locale;
 
 @Configuration
 @ComponentScan("org.example")

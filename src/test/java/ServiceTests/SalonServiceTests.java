@@ -40,7 +40,7 @@ public class SalonServiceTests {
     @Test
     @Order(4)
     public void testSalonFindByIdNotFound(){
-        Assertions.assertThrows(SalonNotFoundException.class, () -> {salonService.findById(11111);});
+        Assertions.assertThrows(SalonNotFoundException.class, () -> salonService.findById(11111));
     }
 
     @Test
@@ -48,12 +48,12 @@ public class SalonServiceTests {
     public void testSalonDeleteById(){
         Assertions.assertNotNull(salonService.findById(1));
         salonService.deleteById(1);
-        Assertions.assertThrows(SalonNotFoundException.class, () -> {salonService.findById(1);});
+        Assertions.assertThrows(SalonNotFoundException.class, () -> salonService.findById(1));
     }
 
     @Test
     @Order(6)
     public void testSalonDeleteByIdNotFound(){
-        Assertions.assertThrows(SalonNotFoundException.class, () -> {salonService.deleteById(11111);});
+        Assertions.assertThrows(SalonNotFoundException.class, () -> salonService.deleteById(11111));
     }
 }
