@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.doa.dto.SalonOverview;
 import org.example.entities.Stylist;
 
 import java.util.List;
@@ -19,5 +20,7 @@ public interface IStylistService {
     void deleteById(int id);
     //Determine the average salary of stylists in a particular salon.
     double findAverageSalaryForSalon(int salonId);
-    // TODO: Get all stylists along with the name of the salon for which they work - use a record.
+    //Get all stylists along with the name of the salon for which they work - use a record.
+    List<SalonOverview> getSalonOverview();
+
 }

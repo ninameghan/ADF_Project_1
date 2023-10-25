@@ -1,5 +1,6 @@
 package org.example.doa;
 
+import org.example.doa.dto.SalonOverview;
 import org.example.entities.Stylist;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface IStylistDao {
     boolean deleteById(int id);
     //Determine the average salary of stylists in a particular salon.
     double findAverageSalaryForSalon(int salonId);
+    //Find all stylist with name of salon (record)
+    List<SalonOverview> getSalonOverview();
 }

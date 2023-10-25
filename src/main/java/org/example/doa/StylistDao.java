@@ -1,5 +1,7 @@
 package org.example.doa;
 
+import org.example.doa.dto.SalonOverview;
+import org.example.doa.dto.SalonOverviewRowMapper;
 import org.example.entities.Stylist;
 import org.example.entities.StylistRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +89,11 @@ public class StylistDao implements IStylistDao{
         mapSqlParameterSource.addValue("salon_id", salonId);
         String SQL = "select avg(stylist_annual_salary) from stylists where salon_id=:salon_id";
         return namedParameterJdbcTemplate.queryForObject(SQL, mapSqlParameterSource, Double.class);
+    }
+
+    @Override
+    public List<SalonOverview> getSalonOverview() {
+        String SQL = "select st.*, sa.salon_name from stylists st join salons sa where st.salon_id = sa.salon_id";
+        return namedParameterJdbcTemplate.query(SQL, new SalonOverviewRowMapper());
     }
 }

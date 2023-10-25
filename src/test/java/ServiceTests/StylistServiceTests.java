@@ -1,8 +1,11 @@
 package ServiceTests;
 
 import org.example.Config;
+import org.example.doa.dto.SalonOverview;
 import org.example.entities.Stylist;
 import org.example.service.IStylistService;
+import org.example.service.exceptions.SalonNotFoundException;
+import org.example.service.exceptions.StylistIdAlreadyExistsException;
 import org.example.service.exceptions.StylistMalformedException;
 import org.example.service.exceptions.StylistNotFoundException;
 import org.junit.jupiter.api.*;
@@ -12,6 +15,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Config.class)
@@ -39,9 +44,7 @@ public class StylistServiceTests {
     @Test
     @Order(3)
     public void testStylistFindByIdNotFound() {
-        Assertions.assertThrows(StylistNotFoundException.class, () -> {
-            stylistService.findById(11111);
-        });
+        Assertions.assertThrows(StylistNotFoundException.class, () -> stylistService.findById(11111));
     }
 
     @Test
@@ -69,15 +72,20 @@ public class StylistServiceTests {
 
     @Test
     @Order(7)
-    public void testStylistAddClashPk() {
-        Stylist stylist = new Stylist(2, "Stylist 11", "0123456789", 20000, 3);
-        Assertions.assertThrows(DuplicateKeyException.class, () -> {
-            stylistService.add(stylist);
-        });
+    public void testAddStylistSalonNotFound() {
+        Stylist stylist = new Stylist(11, "Stylist 11", "0123456789", 20000, 11111);
+        Assertions.assertThrows(SalonNotFoundException.class, () -> stylistService.add(stylist));
     }
 
     @Test
     @Order(8)
+    public void testStylistAddClashPk() {
+        Stylist stylist = new Stylist(2, "Stylist 11", "0123456789", 20000, 3);
+        Assertions.assertThrows(StylistIdAlreadyExistsException.class, () -> stylistService.add(stylist));
+    }
+
+    @Test
+    @Order(9)
     public void testChangeStylistSalon() {
         int oldSalonId = stylistService.findById(1).getSalonId();
         stylistService.changeSalon(2, 1);
@@ -86,36 +94,35 @@ public class StylistServiceTests {
     }
 
     @Test
-    @Order(9)
-    public void testChangeStylistSalonInvalidSalonId() {
-        Assertions.assertThrows(StylistMalformedException.class, () -> {
-            stylistService.changeSalon(0, 1);
-        });
-    }
-
-    @Test
     @Order(10)
-    public void testChangeStylistSalonStylistNotFound() {
-        Assertions.assertThrows(StylistNotFoundException.class, () -> {
-            stylistService.changeSalon(1, 11111);
-        });
+    public void testChangeStylistSalonInvalidSalonId() {
+        Assertions.assertThrows(StylistMalformedException.class, () -> stylistService.changeSalon(0, 1));
     }
 
     @Test
     @Order(11)
-    public void testStylistDeleteById() {
-        Assertions.assertNotNull(stylistService.findById(1));
-        stylistService.deleteById(1);
-        Assertions.assertThrows(StylistNotFoundException.class, () -> {
-            stylistService.findById(1);
-        });
+    public void testChangeStylistSalonStylistNotFound() {
+        Assertions.assertThrows(StylistNotFoundException.class, () -> stylistService.changeSalon(1, 11111));
     }
 
     @Test
     @Order(12)
+    public void testStylistDeleteById() {
+        Assertions.assertNotNull(stylistService.findById(1));
+        stylistService.deleteById(1);
+        Assertions.assertThrows(StylistNotFoundException.class, () -> stylistService.findById(1));
+    }
+
+    @Test
+    @Order(13)
     public void testStylistDeleteByIdNotFound() {
-        Assertions.assertThrows(StylistNotFoundException.class, () -> {
-            stylistService.deleteById(11111);
-        });
+        Assertions.assertThrows(StylistNotFoundException.class, () -> stylistService.deleteById(11111));
+    }
+
+    @Test
+    @Order(14)
+    public void testSalonOverview(){
+        List<SalonOverview> salonOverviews = stylistService.getSalonOverview();
+        Assertions.assertEquals(3, salonOverviews.size());
     }
 }

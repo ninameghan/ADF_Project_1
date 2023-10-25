@@ -1,7 +1,9 @@
 package org.example.service;
 
 import lombok.SneakyThrows;
+import org.example.doa.ISalonDao;
 import org.example.doa.IStylistDao;
+import org.example.doa.dto.SalonOverview;
 import org.example.entities.Stylist;
 import org.example.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class StylistService implements  IStylistService{
     
     @Autowired
     private IStylistDao stylistDao;
+
+    @Autowired
+    private ISalonDao salonDao;
 
     @Override
     public int count() {
@@ -47,6 +52,9 @@ public class StylistService implements  IStylistService{
         if (stylist.getId() <= 0){
             throw new StylistMalformedException("Stylist ID is invalid!");
         }
+        if (salonDao.findById(stylist.getSalonId()).isEmpty()){
+            throw new SalonNotFoundException("Salon with id " + stylist.getSalonId() + " was not found!");
+        }
         if (stylistDao.findById(stylist.getId()).isPresent()){
             throw new StylistIdAlreadyExistsException("Stylist with ID " + stylist.getId() + " already exists!");
         }
@@ -75,7 +83,16 @@ public class StylistService implements  IStylistService{
     }
 
     @Override
+    @SneakyThrows
     public double findAverageSalaryForSalon(int salonId) {
+        if (salonDao.findById(salonId).isEmpty()){
+            throw new SalonNotFoundException("Salon with id " + salonId + " was not found!");
+        }
         return stylistDao.findAverageSalaryForSalon(salonId);
+    }
+
+    @Override
+    public List<SalonOverview> getSalonOverview() {
+        return stylistDao.getSalonOverview();
     }
 }
